@@ -1,82 +1,98 @@
-# ![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
 
-## Template Instructions
-
-Welcome,
-
-This is the Code Institute student template for the bring your own data project option in Predictive Analytics. We have preinstalled all of the tools you need to get started. It's perfectly okay to use this template as the basis for your project submissions. Click the `Use this template` button above to get started.
-
-You can safely delete the Template Instructions section of this README.md file and modify the remaining paragraphs for your own project. Please do read the Template Instructions at least once, though! It contains some important information about the IDE and the extensions we use.
-
-## How to use this repo
-
-1. Use this template to create your GitHub project repo
-
-1. Log into your cloud IDE with your GitHub account.
-
-1. On your Dashboard, click on the New Workspace button
-
-1. Paste in the URL you copied from GitHub earlier
-
-1. Click Create
-
-1. Wait for the workspace to open. This can take a few minutes.
-
-1. Open a new terminal and `pip3 install -r requirements.txt`
-
-1. Open the jupyter_notebooks directory, and click on the notebook you want to open.
-
-1. Click the kernel button and choose Python Environments.
-
-Note that the kernel says Python 3.8.18 as it inherits from the workspace, so it will be Python-3.8.18 as installed by our template. To confirm this, you can use `! python --version` in a notebook code cell.
-
-## Cloud IDE Reminders
-
-To log into the Heroku toolbelt CLI:
-
-1. Log in to your Heroku account and go to _Account Settings_ in the menu under your avatar.
-2. Scroll down to the _API Key_ and click _Reveal_
-3. Copy the key
-4. In the terminal, run `heroku_config`
-5. Paste in your API key when asked
+# BulldozerSalePredictor
 
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you so do not share it. If you accidentally make it public then you can create a new one with _Regenerate API Key_.
+## Introduction
+For this coding project, I've chosen to manipulate data from a Kaggle competition and construct a fictional backstory. The project entails predicting the auction sale price for specific heavy equipment, considering its usage, type, and configuration. The data comes from auction results, offering deep insights into equipment usage and configurations. The ultimate aim is to assist Fast Iron's initiative to create a "blue book for bulldozers," which would help customers assess the value of their heavy equipment fleet at auction.
 
+The project data is sourced from a public Kaggle competition, which can be accessed through the following URL: [Blue Book for Bulldozers] (https://www.kaggle.com/c/bluebook-for-bulldozers/overview)
 
-## Dataset Content
-* Describe your dataset. Choose a dataset of reasonable size to avoid exceeding the repository's maximum size and to have a shorter model training time. If you are doing an image recognition project, we suggest you consider using an image shape that is 100px × 100px or 50px × 50px, to ensure the model meets the performance requirement but is smaller than 100Mb for a smoother push to GitHub. A reasonably sized image set is ~5000 images, but you can choose ~10000 lines for numeric or textual data. 
-
-
-## Business Requirements
-* Describe your business requirements
-
-
-## Hypothesis and how to validate?
-* List here your project hypothesis(es) and how you envision validating it (them) 
-
-
-## The rationale to map the business requirements to the Data Visualizations and ML tasks
-* List your business requirements and a rationale to map them to the Data Visualizations and ML tasks
-
+## Table of Contents
+- [Table of Content](#table-of-contents)
+    - [BulldozerSalePredictor](#BulldozerSalePredictor)
+    - [Introduction](#introduction)
+    - [ML Business Case](#ml-business-case)
+    - [Business Requirements](#business-requirements)
+    - [Dataset Content](#dataset-content)
+    - [Project Hypothesis and Validation](#project-hypothesis-and-validation)
+    - [Explanation for linking business needs to Data Visualizations and ML tasks](#explanation-for-linking-business-needs-to-data-visualizations-and-ml-tasks)
+    - [Dashboard Design](#dashboard-design)
+    - [Unfixed Bugs](#unfixed-bugs)
+    - [Deployment](#deployment)
+        - [Heroku](#heroku)
+    - [Main Data Analysis and Machine Learning Libraries](#main-data-analysis-and-machine-learning-libraries)
+    - [Credits](#credits)
+        - [Recognizing Contributions](#recognizing-contributions)
+        - [Ensuring Compliance with Legal and Ethical Standards](#ensuring-compliance-with-legal-and-ethical-standards)
+    - [Acknowledgements](#acknowledgements)
 
 ## ML Business Case
-* In the previous bullet, you potentially visualized an ML task to answer a business requirement. You should frame the business case using the method we covered in the course 
+1. What are the business objectives?
+    1. The objective of this project is to precisely forecast the auction prices of bulldozers. Specifically, the aim is to ascertain the degree of accuracy with which the future sale price of a bulldozer can be predicted, considering its features and the past sale prices of comparable bulldozers.
+2. What does the client consider as a successful project outcome?
+    1. The evaluation metric for the client is the Root Mean Squared Log Error (RMSLE). The target is to achieve a score lower than 0.25612 between the actual and predicted auction prices.
+3. Does the data suggest a particular model?
+    1. Since the goal is to predict a number, the project model will be a regression problem. It will use a RMSLE (root mean squared log error), as requested by the client.
+4. Is there any business objective that can be answered with conventional data analysis?
+    1. Indeed, conventional data analysis can be employed to examine the correlation between bulldozer attributes and their sale price.
+5. Can you break down the project into Epics and User Stories?
+    1. Information gathering and data collection.
+    2. Data visualization, cleaning, and preparation
+    3. Model training, optimization and validation.
+    4. Dashboard planning, designing, and development.
+    5. Dashboard deployment and release.
+6. What are the model's inputs and intended outputs?
+    1. Upon reviewing the client's dataset, it's clear that it presents a time-series regression problem, indicating that there is a time attribute associated with the dataset.
+    2. In particular, our reference data comes from past bulldozer sales records. These records include information such as model type, size, sale date, and more.
+    3. There are 3 datasets:
+        1. **Train.csv** - Historical bulldozer sales examples up to 2011 (close to 400,000 examples with 50+ different attributes, including `SalePrice` which is the **target variable**).
+        2. **Valid.csv** - Historical bulldozer sales examples from January 1 2012 to April 30 2012 (close to 12,000 examples with the same attributes as **Train.csv**).
+        3. **Test.csv** - Historical bulldozer sales examples from May 1 2012 to November 2012 (close to 12,000 examples but missing the `SalePrice` attribute, as this is what we'll be trying to predict).
+7. How will the client benefit?
+    1. This is very helpful for our client because it allows them to plan their finances and budget accurately based on the estimated selling price.
+    2. It helps them decide when to sell their equipment for the highest profit.
+    3. Also, our predictions give a fair, data-based valuation.
+    4. This helps buyers understand how much the equipment is worth and negotiate a fair price.
+8. Does the client need a dashboard or an API endpoint?
+    1. The client needs a dashboard
+9. Are there any ethical or privacy concerns?
+    1. There are no ethical or privacy concerns since the Kaggle competition data is publicly published.
+10. What are the criteria for the performance goal of the predictions?
+    1. The client has established the evaluation measure as the Root Mean Squared Log Error (RMSLE). The aim is to achieve the smallest possible score, indicating a more accurate prediction.
 
+[Back to Table of contents](#table-of-contents)
+
+## Business Requirements
+Fast Iron, a leading player in the heavy equipment industry, has long been grappling with the challenge of accurately predicting the auction prices of their bulldozers. With a diverse fleet of heavy machinery and an array of different uses, types, and configurations, they found it increasingly complex to appraise the value of their equipment. This uncertainty often led to either over- or under-estimation of their fleet's worth, causing financial discrepancies. Fast Iron decided to tackle this issue head-on and embarked on a mission to create a "blue book for bulldozers," a comprehensive guide that would accurately predict their equipment's auction sale price. They believed that such a solution would not just benefit them, but also prove invaluable to their customers, enabling them to better assess the value of their fleet at auction. To actualize this ambitious project, Fast Iron turned to data science, sparking the inception of the BulldozerSalePredictor initiative.
+
+1. The client requires an accurate model to forecast the auction prices of bulldozers, taking into account their features and past sale prices of similar bulldozers. The model should be able to predict future sale prices with a high degree of precision, as measured by a Root Mean Squared Log Error (RMSLE) score lower than 0.25612.
+2. The client needs a user-friendly dashboard that presents the model's predictions in an easily understandable format. This dashboard will help them make informed decisions about when to sell their equipment for maximum profit and accurately plan their finances and budget.
+
+[Back to Table of contents](#table-of-contents)
+
+## Dataset Content
+
+[Back to Table of contents](#table-of-contents)
+
+## Project Hypothesis and Validation
+
+[Back to Table of contents](#table-of-contents)
+
+## Explanation for linking business needs to Data Visualizations and ML tasks
+
+[Back to Table of contents](#table-of-contents)
 
 ## Dashboard Design
-* List all dashboard pages and their content, either blocks of information or widgets, like buttons, checkboxes, images, or any other item that your dashboard library supports.
-* Later, during the project development, you may revisit your dashboard plan to update a given feature (for example, at the beginning of the project you were confident you would use a given plot to display an insight but subsequently you used another plot type).
 
-
+[Back to Table of contents](#table-of-contents)
 
 ## Unfixed Bugs
-* You will need to mention unfixed bugs and why they were not fixed. This section should include shortcomings of the frameworks or technologies used. Although time can be a significant variable to consider, paucity of time and difficulty understanding implementation is not a valid reason to leave bugs unfixed.
+
+[Back to Table of contents](#table-of-contents)
 
 ## Deployment
 ### Heroku
-
-* The App live link is: https://YOUR_APP_NAME.herokuapp.com/ 
+* The App live link is: https://YOUR_APP_NAME.herokuapp.com/ <!-- TODO:Replace with actual app heroku address  -->
 * Set the runtime.txt Python version to a [Heroku-20](https://devcenter.heroku.com/articles/python-support#supported-runtimes) stack currently supported version.
 * The project was deployed to Heroku using the following steps.
 
@@ -87,29 +103,22 @@ You can now use the `heroku` CLI program - try running `heroku apps` to confirm 
 5. The deployment process should happen smoothly if all deployment files are fully functional. Click now the button Open App on the top of the page to access your App.
 6. If the slug size is too large then add large files not required for the app to the .slugignore file.
 
+[Back to Table of contents](#table-of-contents)
 
 ## Main Data Analysis and Machine Learning Libraries
-* Here you should list the libraries you used in the project and provide an example(s) of how you used these libraries.
 
+[Back to Table of contents](#table-of-contents)
 
 ## Credits 
+### Recognizing Contributions
+### Ensuring Compliance with Legal and Ethical Standards
+This project doesn't involve any ethical or privacy issues since the data used is publicly available from a Kaggle competition. The data for this project can be accessed from the following Kaggle competition: https://www.kaggle.com/c/bluebook-for-bulldozers/overview.
 
-* In this section, you need to reference where you got your content, media and extra help from. It is common practice to use code from other repositories and tutorials, however, it is important to be very specific about these sources to avoid plagiarism. 
-* You can break the credits section up into Content and Media, depending on what you have included in your project. 
+[Back to Table of contents](#table-of-contents)
 
-### Content 
+## Acknowledgements 
 
-- The text for the Home page was taken from Wikipedia Article A
-- Instructions on how to implement form validation on the Sign-Up page was taken from [Specific YouTube Tutorial](https://www.youtube.com/)
-- The icons in the footer were taken from [Font Awesome](https://fontawesome.com/)
+[Back to Table of contents](#table-of-contents)
 
-### Media
-
-- The photos used on the home and sign-up page are from This Open-Source site
-- The images used for the gallery page were taken from this other open-source site
-
-
-
-## Acknowledgements (optional)
-* Thank the people that provided support through this project.
+---
 
